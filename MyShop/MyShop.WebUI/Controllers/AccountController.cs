@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MyShop.WebUI.Models;
+using MyShop.Core.Models;
 
 namespace MyShop.WebUI.Controllers
 {

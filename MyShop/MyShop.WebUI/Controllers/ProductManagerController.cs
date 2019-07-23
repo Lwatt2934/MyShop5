@@ -5,36 +5,40 @@ using System.Web;
 using System.Web.Mvc;
 using MyShop.Core.Models;
 using MyShop.DataAccess.InMemory;
+using MyShop.Core.ViewModels;
 
 namespace MyShop.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
         ProductRepository context;
+        ProductCategoryRepository productCategories;
 
         public ProductManagerController()
         {
             context = new ProductRepository();
+            productCategories = new ProductCategoryRepository();
         }
-
         // GET: ProductManager
         public ActionResult Index()
         {
             List<Product> products = context.Collection().ToList();
-
             return View(products);
         }
 
-        public ActionResult Create ()
+        public ActionResult Create()
         {
-            Product product = new Product();
-            return View(product);
+            ProductManagerViewModel viewModel = new ProductManagerViewModel();
+
+            viewModel.Product = new Product();
+            viewModel.ProductCategories = productCategories.Collection();
+            return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult Create(Product product)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(product);
             }
@@ -45,6 +49,7 @@ namespace MyShop.WebUI.Controllers
 
                 return RedirectToAction("Index");
             }
+
         }
 
         public ActionResult Edit(string Id)
@@ -56,7 +61,11 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
-                return View(product);
+                ProductManagerViewModel viewModel = new ProductManagerViewModel();
+                viewModel.Product = product;
+                viewModel.ProductCategories = productCategories.Collection();
+
+                return View(viewModel);
             }
         }
 
@@ -75,6 +84,7 @@ namespace MyShop.WebUI.Controllers
                 {
                     return View(product);
                 }
+
                 productToEdit.Category = product.Category;
                 productToEdit.Description = product.Description;
                 productToEdit.Image = product.Image;
@@ -117,7 +127,6 @@ namespace MyShop.WebUI.Controllers
                 context.Commit();
                 return RedirectToAction("Index");
             }
-
         }
     }
 }
