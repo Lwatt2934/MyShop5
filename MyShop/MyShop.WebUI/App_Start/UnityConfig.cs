@@ -48,7 +48,6 @@ namespace MyShop.WebUI
             container.RegisterType<IRepository<Product>, InMemoryRepository<Product>>();
             container.RegisterType<IRepository<ProductCategory>, InMemoryRepository<ProductCategory>>();
 
-
         }
     }
 }
